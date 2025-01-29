@@ -7,21 +7,6 @@ The NAND2TETRIS course is divided into two main parts:
 Part I (Hardware, Projects 1-6): Building the hardware platform
 Part II (Software, Projects 7-12): Building the software hierarchy
 
-nand2tetris/
-├── projects/
-│   ├── 01/                  # Boolean Logic
-│   ├── 02/                  # Boolean Arithmetic
-│   ├── 03/                  # Sequential Logic
-│   ├── 04/                  # Machine Language
-│   ├── 05/                  # Computer Architecture
-│   ├── 06/                  # Assembler
-│   ├── 07/                  # VM I: Stack Arithmetic
-│   ├── 08/                  # VM II: Program Control
-│   ├── 09/                  # High-Level Language
-│   ├── 10/                  # Compiler I: Syntax Analysis
-│   └── 12/                  # Compiler II: Code Generation
-
-
 Projects Description
 Hardware Projects (1-6)
 

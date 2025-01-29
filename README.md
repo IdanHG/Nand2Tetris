@@ -8,18 +8,18 @@ Part I (Hardware, Projects 1-6): Building the hardware platform
 Part II (Software, Projects 7-12): Building the software hierarchy
 
 nand2tetris/
+│
 ├── projects/
-│   ├── 01/              # Boolean Logic
-│   ├── 02/              # Boolean Arithmetic
-│   ├── 03/              # Sequential Logic
-│   ├── 04/              # Machine Language
-│   ├── 05/              # Computer Architecture
-│   ├── 06/              # Assembler
-│   ├── 07/              # VM I: Stack Arithmetic
-│   ├── 09/              # High-Level Language
-│   ├── 10/              # Compiler I: Syntax Analysis
-│   ├── 11/              # Compiler II: Code Generation
-└── tools/               # Course-provided tools and emulators
+│   ├── 01_boolean_logic/                 # Basic logic gates
+│   ├── 02_boolean_arithmetic/            # ALU and adders
+│   ├── 03_sequential_logic/              # Registers and memory
+│   ├── 04_machine_language/              # Assembly programming
+│   ├── 05_computer_architecture/         # CPU and hardware
+│   ├── 06_assembler/                     # Assembly translator
+│   ├── 07_vm_stack_arithmetic/           # VM implementation I
+│   ├── 09_high_level_programming/        # Jack programming
+│   ├── 10_compiler_syntax_analysis/      # Compiler front-end
+│   └── 11_compiler_code_generation/      # Compiler back-end
 
 Projects Description
 Hardware Projects (1-6)

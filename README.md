@@ -21,10 +21,9 @@ nand2tetris/
 │   ├── 11/              # Compiler II: Code Generation
 └── tools/               # Course-provided tools and emulators
 
-**Projects Description
-**
-**Hardware Projects (1-6)
-**
+Projects Description
+Hardware Projects (1-6)
+
 Boolean Logic: Implementation of basic logic gates using NAND gates
 Boolean Arithmetic: ALU (Arithmetic Logic Unit) and adder implementations
 Sequential Logic: Registers and memory using D Flip-Flops
@@ -32,16 +31,15 @@ Machine Language: Low-level programming in the Hack assembly language
 Computer Architecture: CPU and computer implementation
 Assembler: Program that translates assembly into binary code
 
-**Software Projects (7,9,10,11)
-**
+Software Projects (7,9,10,11)
+
 VM I: Implementation of stack arithmetic and memory access commands
 VM II: Implementation of branching and function calling commands
 High-Level Language: Programming a simple interactive application in Jack
 Compiler I: Syntax analyzer for the Jack language
 Compiler II: Code generator for the Jack language
 
-**Tools and Testing
-**
+Tools and Testing
 Each project includes:
 
 HDL files (Hardware Description Language) for hardware projects
@@ -49,8 +47,8 @@ Assembly/VM/Jack source files for software projects
 Test scripts provided by the course
 Additional testing files I've created
 
-**Running the Projects
-**
+Running the Projects
+
 Use the online IDE from NAND2TETRIS official website
 1. For projects 1,2,3,5: upload relevant project to the Hardware Simulator and run it
 2. For project 4 upload the relevant Aseembly code to the CPU Emulator, translate it to binary code and run it.

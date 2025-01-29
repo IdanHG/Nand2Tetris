@@ -1,0 +1,191 @@
+class Main {
+
+    /**
+     * Entry point for the game. Controls the main game loop.
+     */
+    function void main() {
+        var ShootingGame game;
+        var int winner;  // Variable to store the winner (1 or 2)
+        var boolean play;
+        let play = true;
+
+        // Show the opening screen
+        do Main.showOpeningScreen();
+
+        // Main game loop
+        while (true) {
+            // Create a new game instance
+            let game = ShootingGame.new();
+            do game.run();  // Start the game logic
+
+            // Determine the winner
+            let winner = game.getWinner();
+
+            // Show the closing screen with the winner and halt the program if the user chooses to exit
+            do Main.showClosingScreen(winner);
+        }
+
+        return;
+    }
+
+    /**
+     * Displays the opening screen with a welcome message and options.
+     */
+    function void showOpeningScreen() {
+        var char key;
+
+        // Clear the screen
+        do Screen.clearScreen();
+
+        // Display welcome message
+        do Output.moveCursor(7, 17);
+        do Output.printString("Welcome to Nand Blasters!");
+        do Output.moveCursor(8, 16);
+        do Output.printString("from logical gates to glory");
+
+        // Display options
+        do Output.moveCursor(12, 20);
+        do Output.printString("For Tutorial, press t");
+        do Output.moveCursor(14, 18);
+        do Output.printString("To play, press any key...");
+
+        // Wait for key press
+        let key = Keyboard.keyPressed();
+        while (key = 0) {
+            let key = Keyboard.keyPressed();
+        }
+
+        // Check if 't' is pressed for the tutorial
+        if (key = 116) {  // 't'
+            do Main.showTutorialScreen();
+        } else {
+            return;  // Proceed to start the game
+        }
+
+        return;
+    }
+
+    /**
+     * Displays the closing screen with the winner and options to replay or exit.
+     */
+    function void showClosingScreen(int winner) {
+        var char key;
+
+        // Clear the screen
+        do Screen.clearScreen();
+
+        // Display the winner message
+        if (winner = 1) {
+            do Output.moveCursor(10, 24);
+            do Output.printString("PLAYER 1 WON!");
+        } else {
+            do Output.moveCursor(10, 24);
+            do Output.printString("PLAYER 2 WON!");
+        }
+
+        // Display replay or exit options
+        do Output.moveCursor(16, 12);
+        do Output.printString("Press 'p' to play again or 'x' to exit...");
+
+        // Wait for user input
+        let key = Keyboard.keyPressed();
+        while (key = 0) {
+            let key = Keyboard.keyPressed();
+        }
+
+        // Handle user input
+        if (key = 120) {  // 'x'
+            do Main.showThankYouScreen();  // Show the thank-you screen before exiting
+        } else {
+            if (key = 112) {  // 'p'
+                return;  // Restart the game
+            } else {
+                do Main.showClosingScreen(winner); 
+            }
+        }
+
+        return;
+    }
+
+    /**
+     * Displays the thank-you screen and halts the program.
+     */
+    function void showThankYouScreen() {
+        var char key;
+
+        // Clear the screen
+        do Screen.clearScreen();
+
+        // Display the thank-you message
+        do Output.moveCursor(10, 14);
+        do Output.printString("Thank you for playing Nand Blasters!");
+        do Output.moveCursor(13, 11);
+        do Output.printString("Game by: Ido Rosenberg & Idan Harel Gross");
+
+        // Halt the game
+        do Sys.halt();
+        return;
+    }
+
+    /**
+     * Displays the tutorial screen with game instructions and controls.
+     */
+    function void showTutorialScreen() {
+        var char key;
+
+        // Clear the screen
+        do Screen.clearScreen();
+
+        // Display the tutorial message
+        do Output.moveCursor(1, 18);
+        do Output.printString("Welcome to the Tutorial!");
+        do Output.moveCursor(3, 12);
+        do Output.printString("Nand Blasters is a game for 2 players!");
+        do Output.moveCursor(5, 13);
+        do Output.printString("Be the first to defeat your opponent");
+        do Output.moveCursor(7, 10);
+        do Output.printString("by shooting them while avoiding their attacks");
+
+        // Display controls for Player 1
+        do Output.moveCursor(11, 2);
+        do Output.printString("Player 1 Controls:");
+        do Output.moveCursor(12, 2);
+        do Output.printString("UP: w");
+        do Output.moveCursor(13, 2);
+        do Output.printString("DOWN: s");
+        do Output.moveCursor(14, 2);
+        do Output.printString("LEFT: a");
+        do Output.moveCursor(15, 2);
+        do Output.printString("RIGHT: d");
+        do Output.moveCursor(16, 2);
+        do Output.printString("SHOOT: space");
+
+        // Display controls for Player 2
+        do Output.moveCursor(11, 40);
+        do Output.printString("Player 2 Controls:");
+        do Output.moveCursor(12, 40);
+        do Output.printString("UP: up arrow");
+        do Output.moveCursor(13, 40);
+        do Output.printString("DOWN: down arrow");
+        do Output.moveCursor(14, 40);
+        do Output.printString("LEFT: left arrow");
+        do Output.moveCursor(15, 40);
+        do Output.printString("RIGHT: right arrow");
+        do Output.moveCursor(16, 40);
+        do Output.printString("SHOOT: enter");
+
+        // Prompt to return to the main menu
+        do Output.moveCursor(20, 10);
+        do Output.printString("Press any key to return to the main menu...");
+
+        // Wait for a key press to return
+        let key = Keyboard.keyPressed();
+        while (key = 0) {
+            let key = Keyboard.keyPressed();
+        }
+
+        // Return to the opening screen
+        do Main.showOpeningScreen();
+        return;
+    }
+}

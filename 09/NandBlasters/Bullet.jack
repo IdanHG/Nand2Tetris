@@ -1,0 +1,197 @@
+class Bullet {
+
+    field int x, y, direction; // Position and movement direction of the bullet
+
+    /**
+     * Constructor to initialize a new bullet at a given position and direction.
+     * @param ax The initial x-coordinate of the bullet.
+     * @param ay The initial y-coordinate of the bullet.
+     * @param aDirection The direction the bullet is moving (1-8).
+     */
+    constructor Bullet new(int ax, int ay, int aDirection) {
+        let x = ax;
+        let y = ay;
+        let direction = aDirection;
+
+        // Draw the bullet based on its direction
+        if (aDirection = 1 | aDirection = 2 | aDirection = 5 | aDirection = 6) {
+            // Vertical movement
+            do Bullet.drawVertical((y * 32) + (x / 16));
+        } else {
+            // Horizontal movement
+            do Bullet.drawHorizontal((y * 32) + (x / 16));
+        }
+
+        return this;
+    }
+
+    /**
+     * Getter for the bullet's x-coordinate.
+     * @return The x-coordinate of the bullet.
+     */
+    method int getX() {
+        return x;
+    }
+
+    /**
+     * Getter for the bullet's y-coordinate.
+     * @return The y-coordinate of the bullet.
+     */
+    method int getY() {
+        return y;
+    }
+
+    /**
+     * Deallocates this bullet object from memory.
+     */
+     
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    /**
+     * Moves the bullet based on its direction and checks if it's out of bounds.
+     * @return True if the bullet is still within bounds, false otherwise.
+     */
+    method boolean moveBullet() {
+        if ((direction = 1) | (direction = 5)) { // Up
+            return moveUp();
+        }
+        if ((direction = 2) | (direction = 6)) { // Down
+            return moveDown();
+        }
+        if ((direction = 3) | (direction = 7)) { // Left
+            return moveLeft();
+        }
+        if ((direction = 4) | (direction = 8)) { // Right
+            return moveRight();
+        }
+        return false; // Default case (invalid direction)
+    }
+
+    /**
+     * Moves the bullet upward.
+     * @return True if the bullet is still within bounds, false otherwise.
+     */
+    method boolean moveUp() {
+        if ((y < 34) | (y = 34)) { // Reached the top screen border
+            do Bullet.eraseVertical((y * 32) + (x / 16));
+            return false;
+        }
+        do Bullet.eraseVertical((y * 32) + (x / 16));
+        let y = y - 4;
+        do Bullet.drawVertical((y * 32) + (x / 16));
+        return true;
+    }
+
+    /**
+     * Moves the bullet downward.
+     * @return True if the bullet is still within bounds, false otherwise.
+     */
+    method boolean moveDown() {
+        if ((y > 251) | (y = 251)) { // Reached the bottom screen border
+            do Bullet.eraseVertical((y * 32) + (x / 16));
+            return false;
+        }
+        do Bullet.eraseVertical((y * 32) + (x / 16));
+        let y = y + 4;
+        do Bullet.drawVertical((y * 32) + (x / 16));
+        return true;
+    }
+
+    /**
+     * Moves the bullet to the left.
+     * @return True if the bullet is still within bounds, false otherwise.
+     */
+    method boolean moveLeft() {
+        if ((x < 1) | (x = 1)) { // Reached the left screen border
+            do Bullet.eraseHorizontal((y * 32) + (x / 16));
+            return false;
+        }
+        do Bullet.eraseHorizontal((y * 32) + (x / 16));
+        let x = x - 4;
+        do Bullet.drawHorizontal((y * 32) + (x / 16));
+        return true;
+    }
+
+    /**
+     * Moves the bullet to the right.
+     * @return True if the bullet is still within bounds, false otherwise.
+     */
+    method boolean moveRight() {
+        if ((x > 507) | (x = 507)) { // Reached the right screen border
+            do Bullet.eraseHorizontal((y * 32) + (x / 16));
+            return false;
+        }
+        do Bullet.eraseHorizontal((y * 32) + (x / 16));
+        let x = x + 4;
+        do Bullet.drawHorizontal((y * 32) + (x / 16));
+        return true;
+    }
+
+    /**
+     * Draws a horizontal bullet at a given memory location.
+     * @param location The memory location to draw the bullet.
+     */
+    function void drawHorizontal(int location) {
+        var int memAddress; 
+        let memAddress = 16384 + location;
+        do Memory.poke(memAddress, 15);
+        do Memory.poke(memAddress + 32, 15);
+        return;
+    }
+
+    /**
+     * Draws a vertical bullet at a given memory location.
+     * @param location The memory location to draw the bullet.
+     */
+    function void drawVertical(int location) {
+        var int memAddress;
+        let memAddress = 16384 + location;
+
+        // Skip drawing if the bullet is in the border row (y = 31)
+        if ((location / 32) > 29 & (location / 32) < 32) {
+            return;
+        }
+
+        do Memory.poke(memAddress, 3);
+        do Memory.poke(memAddress + 32, 3);
+        do Memory.poke(memAddress + 64, 3);
+        do Memory.poke(memAddress + 96, 3);
+        return;
+    }
+
+    /**
+     * Erases a horizontal bullet from a given memory location.
+     * @param location The memory location to erase the bullet.
+     */
+    function void eraseHorizontal(int location) {
+        var int memAddress; 
+        let memAddress = 16384 + location;
+        do Memory.poke(memAddress, 0);
+        do Memory.poke(memAddress + 32, 0);
+        return;
+    }
+
+    /**
+     * Erases a vertical bullet from a given memory location.
+     * @param location The memory location to erase the bullet.
+     */
+    function void eraseVertical(int location) {
+        var int memAddress;
+        let memAddress = 16384 + location;
+
+        // Skip erasing if the bullet is in the border row (y = 31)
+        if ((location / 32) > 29 & (location / 32) < 32) {
+            return;
+        }
+
+        do Memory.poke(memAddress, 0);
+        do Memory.poke(memAddress + 32, 0);
+        do Memory.poke(memAddress + 64, 0);
+        do Memory.poke(memAddress + 96, 0);
+        return;
+    }
+
+}

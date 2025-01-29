@@ -1,0 +1,465 @@
+function Bullet.new 0
+    push constant 3
+    call Memory.alloc 1
+    pop pointer 0
+    push argument 0
+    pop this 0
+    push argument 1
+    pop this 1
+    push argument 2
+    pop this 2
+    push argument 2
+    push constant 1
+    eq
+    push argument 2
+    or
+    push constant 2
+    eq
+    push argument 2
+    or
+    push constant 5
+    eq
+    push argument 2
+    or
+    push constant 6
+    eq
+    not
+    if-goto L57
+    push this 1
+    push constant 32
+    call Math.multiply 2
+    push this 0
+    push constant 16
+    call Math.divide 2
+    add
+    call Bullet.drawVertical 1
+    pop temp 0
+    goto L58
+label L57
+    push this 1
+    push constant 32
+    call Math.multiply 2
+    push this 0
+    push constant 16
+    call Math.divide 2
+    add
+    call Bullet.drawHorizontal 1
+    pop temp 0
+label L58
+    push pointer 0
+    return
+function Bullet.getX 0
+    push argument 0
+    pop pointer 0
+    push this 0
+    return
+function Bullet.getY 0
+    push argument 0
+    pop pointer 0
+    push this 1
+    return
+function Bullet.dispose 0
+    push argument 0
+    pop pointer 0
+    push pointer 0
+    call Memory.deAlloc 1
+    pop temp 0
+    push constant 0
+    return
+function Bullet.moveBullet 0
+    push argument 0
+    pop pointer 0
+    push this 2
+    push constant 1
+    eq
+    push this 2
+    push constant 5
+    eq
+    or
+    not
+    if-goto L59
+    push pointer 0
+    call Bullet.moveUp 1
+    return
+    goto L60
+label L59
+label L60
+    push this 2
+    push constant 2
+    eq
+    push this 2
+    push constant 6
+    eq
+    or
+    not
+    if-goto L61
+    push pointer 0
+    call Bullet.moveDown 1
+    return
+    goto L62
+label L61
+label L62
+    push this 2
+    push constant 3
+    eq
+    push this 2
+    push constant 7
+    eq
+    or
+    not
+    if-goto L63
+    push pointer 0
+    call Bullet.moveLeft 1
+    return
+    goto L64
+label L63
+label L64
+    push this 2
+    push constant 4
+    eq
+    push this 2
+    push constant 8
+    eq
+    or
+    not
+    if-goto L65
+    push pointer 0
+    call Bullet.moveRight 1
+    return
+    goto L66
+label L65
+label L66
+    push constant 0
+    return
+function Bullet.moveUp 0
+    push argument 0
+    pop pointer 0
+    push this 1
+    push constant 34
+    lt
+    push this 1
+    push constant 34
+    eq
+    or
+    not
+    if-goto L67
+    push this 1
+    push constant 32
+    call Math.multiply 2
+    push this 0
+    push constant 16
+    call Math.divide 2
+    add
+    call Bullet.eraseVertical 1
+    pop temp 0
+    push constant 0
+    return
+    goto L68
+label L67
+label L68
+    push this 1
+    push constant 32
+    call Math.multiply 2
+    push this 0
+    push constant 16
+    call Math.divide 2
+    add
+    call Bullet.eraseVertical 1
+    pop temp 0
+    push this 1
+    push constant 4
+    sub
+    pop this 1
+    push this 1
+    push constant 32
+    call Math.multiply 2
+    push this 0
+    push constant 16
+    call Math.divide 2
+    add
+    call Bullet.drawVertical 1
+    pop temp 0
+    push constant 1
+    neg
+    return
+function Bullet.moveDown 0
+    push argument 0
+    pop pointer 0
+    push this 1
+    push constant 251
+    gt
+    push this 1
+    push constant 251
+    eq
+    or
+    not
+    if-goto L69
+    push this 1
+    push constant 32
+    call Math.multiply 2
+    push this 0
+    push constant 16
+    call Math.divide 2
+    add
+    call Bullet.eraseVertical 1
+    pop temp 0
+    push constant 0
+    return
+    goto L70
+label L69
+label L70
+    push this 1
+    push constant 32
+    call Math.multiply 2
+    push this 0
+    push constant 16
+    call Math.divide 2
+    add
+    call Bullet.eraseVertical 1
+    pop temp 0
+    push this 1
+    push constant 4
+    add
+    pop this 1
+    push this 1
+    push constant 32
+    call Math.multiply 2
+    push this 0
+    push constant 16
+    call Math.divide 2
+    add
+    call Bullet.drawVertical 1
+    pop temp 0
+    push constant 1
+    neg
+    return
+function Bullet.moveLeft 0
+    push argument 0
+    pop pointer 0
+    push this 0
+    push constant 1
+    lt
+    push this 0
+    push constant 1
+    eq
+    or
+    not
+    if-goto L71
+    push this 1
+    push constant 32
+    call Math.multiply 2
+    push this 0
+    push constant 16
+    call Math.divide 2
+    add
+    call Bullet.eraseHorizontal 1
+    pop temp 0
+    push constant 0
+    return
+    goto L72
+label L71
+label L72
+    push this 1
+    push constant 32
+    call Math.multiply 2
+    push this 0
+    push constant 16
+    call Math.divide 2
+    add
+    call Bullet.eraseHorizontal 1
+    pop temp 0
+    push this 0
+    push constant 4
+    sub
+    pop this 0
+    push this 1
+    push constant 32
+    call Math.multiply 2
+    push this 0
+    push constant 16
+    call Math.divide 2
+    add
+    call Bullet.drawHorizontal 1
+    pop temp 0
+    push constant 1
+    neg
+    return
+function Bullet.moveRight 0
+    push argument 0
+    pop pointer 0
+    push this 0
+    push constant 507
+    gt
+    push this 0
+    push constant 507
+    eq
+    or
+    not
+    if-goto L73
+    push this 1
+    push constant 32
+    call Math.multiply 2
+    push this 0
+    push constant 16
+    call Math.divide 2
+    add
+    call Bullet.eraseHorizontal 1
+    pop temp 0
+    push constant 0
+    return
+    goto L74
+label L73
+label L74
+    push this 1
+    push constant 32
+    call Math.multiply 2
+    push this 0
+    push constant 16
+    call Math.divide 2
+    add
+    call Bullet.eraseHorizontal 1
+    pop temp 0
+    push this 0
+    push constant 4
+    add
+    pop this 0
+    push this 1
+    push constant 32
+    call Math.multiply 2
+    push this 0
+    push constant 16
+    call Math.divide 2
+    add
+    call Bullet.drawHorizontal 1
+    pop temp 0
+    push constant 1
+    neg
+    return
+function Bullet.drawHorizontal 1
+    push constant 16384
+    push argument 0
+    add
+    pop local 0
+    push local 0
+    push constant 15
+    call Memory.poke 2
+    pop temp 0
+    push local 0
+    push constant 32
+    add
+    push constant 15
+    call Memory.poke 2
+    pop temp 0
+    push constant 0
+    return
+function Bullet.drawVertical 1
+    push constant 16384
+    push argument 0
+    add
+    pop local 0
+    push argument 0
+    push constant 32
+    call Math.divide 2
+    push constant 29
+    gt
+    push argument 0
+    push constant 32
+    call Math.divide 2
+    and
+    push constant 32
+    lt
+    not
+    if-goto L75
+    push constant 0
+    return
+    goto L76
+label L75
+label L76
+    push local 0
+    push constant 3
+    call Memory.poke 2
+    pop temp 0
+    push local 0
+    push constant 32
+    add
+    push constant 3
+    call Memory.poke 2
+    pop temp 0
+    push local 0
+    push constant 64
+    add
+    push constant 3
+    call Memory.poke 2
+    pop temp 0
+    push local 0
+    push constant 96
+    add
+    push constant 3
+    call Memory.poke 2
+    pop temp 0
+    push constant 0
+    return
+function Bullet.eraseHorizontal 1
+    push constant 16384
+    push argument 0
+    add
+    pop local 0
+    push local 0
+    push constant 0
+    call Memory.poke 2
+    pop temp 0
+    push local 0
+    push constant 32
+    add
+    push constant 0
+    call Memory.poke 2
+    pop temp 0
+    push constant 0
+    return
+function Bullet.eraseVertical 1
+    push constant 16384
+    push argument 0
+    add
+    pop local 0
+    push argument 0
+    push constant 32
+    call Math.divide 2
+    push constant 29
+    gt
+    push argument 0
+    push constant 32
+    call Math.divide 2
+    and
+    push constant 32
+    lt
+    not
+    if-goto L77
+    push constant 0
+    return
+    goto L78
+label L77
+label L78
+    push local 0
+    push constant 0
+    call Memory.poke 2
+    pop temp 0
+    push local 0
+    push constant 32
+    add
+    push constant 0
+    call Memory.poke 2
+    pop temp 0
+    push local 0
+    push constant 64
+    add
+    push constant 0
+    call Memory.poke 2
+    pop temp 0
+    push local 0
+    push constant 96
+    add
+    push constant 0
+    call Memory.poke 2
+    pop temp 0
+    push constant 0
+    return

@@ -1,0 +1,87 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/5/CPU.hdl
+/**
+ * The Hack Central Processing unit (CPU).
+ * Parses the binary code in the instruction input and executes it according to the
+ * Hack machine language specification. In the case of a C-instruction, computes the
+ * function specified by the instruction. If the instruction specifies to read a memory
+ * value, the inM input is expected to contain this value. If the instruction specifies
+ * to write a value to the memory, sets the outM output to this value, sets the addressM
+ * output to the target address, and asserts the writeM output (when writeM = 0, any
+ * value may appear in outM).
+ * If the reset input is 0, computes the address of the next instruction and sets the
+ * pc output to that value. If the reset input is 1, sets pc to 0.
+ * Note: The outM and writeM outputs are combinational: they are affected by the
+ * instruction's execution during the current cycle. The addressM and pc outputs are
+ * clocked: although they are affected by the instruction's execution, they commit to
+ * their new values only in the next cycle.
+ */
+CHIP CPU {
+
+    IN  inM[16],         // M value input  (M = contents of RAM[A])
+        instruction[16], // Instruction for execution
+        reset;           // Signals whether to re-start the current
+                         // program (reset==1) or continue executing
+                         // the current program (reset==0).
+
+    OUT outM[16],        // M value output
+        writeM,          // Write to M? 
+        addressM[15],    // Address in data memory (of M)
+        pc[15];          // address of next instruction
+
+    PARTS:
+	//// Replace this comment with your code.
+//First we'll handle the instruction and decide whether its A or C
+    //Decide whether the outM or instruction go into the A register.
+    //Negating instruction[15] help us making sure that the CPU might won't mistakenly use ALU outputs (which are irrelevant for A-instructions) to modify the A register.
+    Not(in=instruction[15] , out=AslotInstruction);
+    Mux16(a=outM1 , b=instruction , sel=AslotInstruction , out=ToAregister);
+
+    //Stores the relevant out of A register, inM and D register.
+    Or(a=AslotInstruction , b=instruction[5] , out=loadA);
+    ARegister(in=ToAregister , load=loadA , out=Aregister , out[0..14]=addressM);
+
+    //Decide which data to load to the ALU : A register or inM.
+    And(a=instruction[15] , b=instruction[12] , out=AorM);
+    Mux16(a=Aregister , b=inM , sel=AorM , out=RegOrInM);
+
+    //Stores the D register according to the value on the ADM slots.
+    And(a=instruction[15] , b=instruction[4] , out=loadD);
+    //Notice that the method input is outM1 according to the chip structure.
+    DRegister(in=outM1 , load=loadD , out=Dregister);
+
+    //Use the ALU chip from project 2 and add and output of outM1 that will be the input to the first Mux16.
+    ALU(x=Dregister , y=RegOrInM , zx=instruction[11] , nx=instruction[10] , zy=instruction[9] , ny=instruction[8] , f=instruction[7] , no=instruction[6] , out=outM, out=outM1 , zr=zr , ng=ng);
+
+    //Checks if we need to write to memory according to the relevant slot on the bus.
+    And(a=instruction[15] , b=instruction[3] , out=writeM);
+
+    //Checks the ng zr outputs of the ALU calculations.
+    //zr :  if (out == 0) equals 1, else 0.
+    //ng :  if (out < 0)  equals 1, else 0.
+    Not(in=zr , out=notzr); //if its else then zero we will get 1
+    Not(in=ng , out=notng); //if its negative we will get 1
+    And(a=notzr , b=notng , out=btzero);
+
+    //Checks if ALU output is positive
+    And(a=instruction[15] , b=instruction[0] , out=jgt);
+    And(a=btzero , b=jgt , out=LoadOne);
+
+    //Checks if ALU output equals to zero
+    And(a=instruction[15] , b=instruction[1] , out=jeq);
+    And(a=zr , b=jeq , out=LoadTwo);
+
+    //Checks if ALU output is negative
+    And(a=instruction[15] , b=instruction[2] , out=jlt);
+    And(a=ng , b=jlt , out=LoadThree);
+
+    //Decide what is the Control output that will be the input of the PC chip.
+    Or(a=LoadOne , b=LoadTwo , out=OrLoad1);
+    Or(a=OrLoad1 , b=LoadThree , out=PCload);
+
+    //PC chip
+    PC(in=Aregister , load=PCload , inc=true, reset=reset , out[0..14]=pc);
+
+}

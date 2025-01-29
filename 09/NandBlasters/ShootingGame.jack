@@ -1,0 +1,323 @@
+class ShootingGame {
+
+    field Soldier player1, player2; // The two players in the game
+    field Array bullets;           // List of active bullets
+    field int bulletCount;         // Current number of active bullets
+
+    /**
+     * Constructor to initialize the game, players, and UI.
+     */
+    constructor ShootingGame new() {
+        // Clear the screen first
+        do Screen.clearScreen();
+        // Create two soldiers
+        let player1 = Soldier.new(false, 119, 115, 97, 100, 32, 118, 8); // WSAD keys and space to shoot
+        let player2 = Soldier.new(true, 131, 133, 130, 132, 128, 47, 7); // Arrow keys and enter to shoot
+        let bullets = Array.new(50); // Allocate space for up to 50 bullets
+        let bulletCount = 0;
+
+        // Draw the user interface
+        do Output.moveCursor(1, 26);
+        do Output.printString("Nand Blasters");
+        do Screen.drawRectangle(0, 30, 511, 31);
+
+        // Display health information for both players
+        do Output.moveCursor(1, 1);
+        do Output.printString("P1 health: ");
+        do Output.moveCursor(1, 12);
+        do Output.printInt(player1.getHealth());
+
+        do Output.moveCursor(1, 50);
+        do Output.printString("P2 health: ");
+        do Output.moveCursor(1, 61);
+        do Output.printInt(player2.getHealth());
+
+        return this;
+    }
+
+        /**
+     * The main game loop.
+     */
+    method void run() {
+        var char key;
+        var boolean exit, gameOver;
+        var int p1health, p2health;
+        let exit = false;
+        let gameOver = false;
+
+        while (~exit & ~gameOver) {
+            // Check for key press
+            let key = Keyboard.keyPressed();
+
+            // Update directions for both players
+            do player1.setDirection(key);
+            do player2.setDirection(key);
+
+            // Move players
+            do movePlayer(player1, player2);
+            do moveSecondPlayer(player2, player1);
+
+            // Shoot bullets if the keys are pressed
+            do addBullet1(player1.shoot1(key), key);
+            do addBullet2(player2.shoot2(key), key);
+
+            // Update bullets
+            do updateBullets(player1, player2);
+
+            // Check player health
+            let p1health = player1.getHealth();
+            let p2health = player2.getHealth();
+
+            if (p1health < 1) { let gameOver = true; }
+            if (p2health < 1) { let gameOver = true; }
+
+            // Add a small delay for smoother gameplay
+            do Sys.wait(1);
+
+            // Allow exiting the game with a specific key (e.g., ESC key = 140)
+            if (key = 140) { let exit = true; }
+        }
+
+        return;
+    }
+
+    /**
+     * Cleans up the game resources by deallocating memory.
+     */
+    method void dispose() {
+        var int i;
+        var Bullet bul;
+        let i = 0;
+        do player1.dispose();
+        do player2.dispose();
+        do Memory.deAlloc(bullets);
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    /**
+     * Moves a player based on its direction and checks for collisions.
+     * @param soldier The player to move.
+     * @param other The other player (to check for collisions).
+     */
+    method void movePlayer(Soldier soldier, Soldier other) {
+        var int direction;
+        let direction = soldier.getDirection();
+
+        // Check for collisions before moving
+        if (~collision(soldier, other, direction)) {
+            if (direction = 1) { do soldier.moveUp(); }
+            if (direction = 2) { do soldier.moveDown(); }
+            if (direction = 3) { do soldier.moveLeft(); }
+            if (direction = 4) { do soldier.moveRight(); }
+        }
+
+        return;
+    }
+
+    /**
+     * Moves the second player based on its direction and checks for collisions.
+     * @param soldier The player to move.
+     * @param other The other player (to check for collisions).
+     */
+    method void moveSecondPlayer(Soldier soldier, Soldier other) {
+        var int direction;
+        let direction = soldier.getDirection();
+
+        // Check for collisions before moving
+        if (~collision(soldier, other, direction)) {
+            if (direction = 1) { do soldier.moveUpSoldier2(); }
+            if (direction = 2) { do soldier.moveDownSoldier2(); }
+            if (direction = 3) { do soldier.moveLeftSoldier2(); }
+            if (direction = 4) { do soldier.moveRightSoldier2(); }
+        }
+
+        return;
+    }
+
+    /**
+     * Checks if two soldiers are colliding based on the direction of movement.
+     * @param p1 The first soldier.
+     * @param p2 The second soldier.
+     * @param direction The direction of p1's movement.
+     * @return True if there is a collision, false otherwise.
+     */
+    method boolean collision(Soldier p1, Soldier p2, int direction) {
+        var int ox, oy;
+        var int x, y;
+        if (direction > 4) { return false; } // No movement, no collision
+
+        let x = p1.getX();
+        let y = p1.getY();
+        let ox = p2.getX();
+        let oy = p2.getY();
+
+        // Update location based on movement direction
+        if (direction = 1) { let y = y - 2; }
+        if (direction = 2) { let y = y + 2; }
+        if (direction = 3) { let x = x - 2; }
+        if (direction = 4) { let x = x + 2; }
+
+        // Check bounding box collision (both soldiers are 32×32 in size)
+        return (
+            (x < (ox + 32)) &
+            ((x + 32) > ox) &
+            (y < (oy + 32)) &
+            ((y + 32) > oy)
+        );
+    }
+
+    /**
+     * Updates all active bullets, handles movement and collisions.
+     * @param player1 The first player.
+     * @param player2 The second player.
+     */
+    method void updateBullets(Soldier player1, Soldier player2) {
+        var int i;
+        var boolean stillMoving;
+        var Bullet bul;
+        var boolean p1hit, p2hit;
+        var boolean p1dead, p2dead;
+        var int health;
+
+        let i = 0;
+        while (i < bulletCount) {
+            let bul = bullets[i];
+            let p1hit = bulletCollide(bul, player1);
+            let p2hit = bulletCollide(bul, player2);
+
+            // Check if the bullet hits player1
+            if (p1hit) {
+                let p1dead = player1.gotHit();
+                let health = player1.getHealth();
+                if (health < 10) {
+                    do Output.moveCursor(1, 13);
+                    do Output.printString(" ");
+                }
+                do Output.moveCursor(1, 12);
+                do Output.printInt(player1.getHealth());
+
+                do bul.dispose();
+                do removeBullet(i);
+
+                if (~p1dead) {
+                    do Output.moveCursor(20, 20);
+                    do Output.printString("Player 1 DEAD!");
+                }
+            }
+
+            // Check if the bullet hits player2
+            if (~p1hit & p2hit) {
+                let p2dead = player2.gotHit();
+                let health = player2.getHealth();
+                if (health < 10) {
+                    do Output.moveCursor(1, 62);
+                    do Output.printString(" ");
+                }
+                do Output.moveCursor(1, 61);
+                do Output.printInt(player2.getHealth());
+
+                do bul.dispose();
+                do removeBullet(i);
+
+                if (~p2dead) {
+                    do Output.moveCursor(10, 10);
+                    do Output.printString("Player 2 DEAD!");
+                }
+            }
+
+            // Move the bullet if it doesn't hit anything
+            if (~p1hit & ~p2hit) {
+                let stillMoving = bul.moveBullet();
+                if (~stillMoving) {
+                    do bul.dispose();
+                    do removeBullet(i);
+                } else {
+                    let i = i + 1;
+                }
+            }
+        }
+
+        return;
+    }
+
+    /**
+     * Adds a bullet for player1 if the shoot key is pressed.
+     * @param bullet The bullet object.
+     * @param key The pressed key.
+     */
+    method void addBullet1(Bullet bullet, int key) {
+        if (key = 32) {
+            let bullets[bulletCount] = bullet;
+            let bulletCount = bulletCount + 1;
+        }
+        return;
+    }
+
+    /**
+     * Adds a bullet for player2 if the shoot key is pressed.
+     * @param bullet The bullet object.
+     * @param key The pressed key.
+     */
+    method void addBullet2(Bullet bullet, int key) {
+        if (key = 128) {
+            let bullets[bulletCount] = bullet;
+            let bulletCount = bulletCount + 1;
+        }
+        return;
+    }
+
+    /**
+     * Removes a bullet from the active bullets array.
+     * @param index The index of the bullet to remove.
+     */
+    method void removeBullet(int index) {
+        var int j;
+        let j = index;
+
+        while (j < (bulletCount - 1)) {
+            let bullets[j] = bullets[j + 1];
+            let j = j + 1;
+        }
+
+        let bulletCount = bulletCount - 1;
+        return;
+    }
+
+    /**
+     * Checks if a bullet collides with a soldier.
+     * @param bullet The bullet object.
+     * @param soldier The soldier to check against.
+     * @return True if a collision occurs, false otherwise.
+     */
+    method boolean bulletCollide(Bullet bullet, Soldier soldier) {
+        var int bx, by, sx, sy;
+
+        let bx = bullet.getX();
+        let by = bullet.getY();
+        let sx = soldier.getX();
+        let sy = soldier.getY();
+
+        // Check bounding box collision
+        return (
+            (bx < (sx + 32)) &
+            ((bx + 4) > sx) &
+            (by < (sy + 32)) &
+            ((by + 4) > sy)
+        );
+    }
+
+    /**
+     * Determines the winner based on player health.
+     * @return 1 if player1 wins, 2 if player2 wins, or 0 for no winner.
+     */
+    method int getWinner() {
+        if (player1.getHealth() < 1) { 
+            return 2; // Player 2 wins
+        }
+        if (player2.getHealth() < 1) { 
+            return 1; // Player 1 wins
+        }
+        return 0; // No winner yet
+    }
+}

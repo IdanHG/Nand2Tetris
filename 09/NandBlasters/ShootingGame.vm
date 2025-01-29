@@ -1,0 +1,888 @@
+function ShootingGame.new 0
+    push constant 4
+    call Memory.alloc 1
+    pop pointer 0
+    call Screen.clearScreen 0
+    pop temp 0
+    push constant 0
+    push constant 119
+    push constant 115
+    push constant 97
+    push constant 100
+    push constant 32
+    push constant 118
+    push constant 8
+    call Soldier.new 8
+    pop this 0
+    push constant 1
+    neg
+    push constant 131
+    push constant 133
+    push constant 130
+    push constant 132
+    push constant 128
+    push constant 47
+    push constant 7
+    call Soldier.new 8
+    pop this 1
+    push constant 50
+    call Array.new 1
+    pop this 2
+    push constant 0
+    pop this 3
+    push constant 1
+    push constant 26
+    call Output.moveCursor 2
+    pop temp 0
+    push constant 13
+    call String.new 1
+    push constant 78
+    call String.appendChar 2
+    push constant 97
+    call String.appendChar 2
+    push constant 110
+    call String.appendChar 2
+    push constant 100
+    call String.appendChar 2
+    push constant 32
+    call String.appendChar 2
+    push constant 66
+    call String.appendChar 2
+    push constant 108
+    call String.appendChar 2
+    push constant 97
+    call String.appendChar 2
+    push constant 115
+    call String.appendChar 2
+    push constant 116
+    call String.appendChar 2
+    push constant 101
+    call String.appendChar 2
+    push constant 114
+    call String.appendChar 2
+    push constant 115
+    call String.appendChar 2
+    call Output.printString 1
+    pop temp 0
+    push constant 0
+    push constant 30
+    push constant 511
+    push constant 31
+    call Screen.drawRectangle 4
+    pop temp 0
+    push constant 1
+    push constant 1
+    call Output.moveCursor 2
+    pop temp 0
+    push constant 11
+    call String.new 1
+    push constant 80
+    call String.appendChar 2
+    push constant 49
+    call String.appendChar 2
+    push constant 32
+    call String.appendChar 2
+    push constant 104
+    call String.appendChar 2
+    push constant 101
+    call String.appendChar 2
+    push constant 97
+    call String.appendChar 2
+    push constant 108
+    call String.appendChar 2
+    push constant 116
+    call String.appendChar 2
+    push constant 104
+    call String.appendChar 2
+    push constant 58
+    call String.appendChar 2
+    push constant 32
+    call String.appendChar 2
+    call Output.printString 1
+    pop temp 0
+    push constant 1
+    push constant 12
+    call Output.moveCursor 2
+    pop temp 0
+    push this 0
+    call Soldier.getHealth 1
+    call Output.printInt 1
+    pop temp 0
+    push constant 1
+    push constant 50
+    call Output.moveCursor 2
+    pop temp 0
+    push constant 11
+    call String.new 1
+    push constant 80
+    call String.appendChar 2
+    push constant 50
+    call String.appendChar 2
+    push constant 32
+    call String.appendChar 2
+    push constant 104
+    call String.appendChar 2
+    push constant 101
+    call String.appendChar 2
+    push constant 97
+    call String.appendChar 2
+    push constant 108
+    call String.appendChar 2
+    push constant 116
+    call String.appendChar 2
+    push constant 104
+    call String.appendChar 2
+    push constant 58
+    call String.appendChar 2
+    push constant 32
+    call String.appendChar 2
+    call Output.printString 1
+    pop temp 0
+    push constant 1
+    push constant 61
+    call Output.moveCursor 2
+    pop temp 0
+    push this 1
+    call Soldier.getHealth 1
+    call Output.printInt 1
+    pop temp 0
+    push pointer 0
+    return
+function ShootingGame.run 5
+    push argument 0
+    pop pointer 0
+    push constant 0
+    pop local 1
+    push constant 0
+    pop local 2
+label L95
+    push local 1
+    not
+    push local 2
+    not
+    and
+    not
+    if-goto L96
+    call Keyboard.keyPressed 0
+    pop local 0
+    push this 0
+    push local 0
+    call Soldier.setDirection 2
+    pop temp 0
+    push this 1
+    push local 0
+    call Soldier.setDirection 2
+    pop temp 0
+    push pointer 0
+    push this 0
+    push this 1
+    call ShootingGame.movePlayer 3
+    pop temp 0
+    push pointer 0
+    push this 1
+    push this 0
+    call ShootingGame.moveSecondPlayer 3
+    pop temp 0
+    push pointer 0
+    push this 0
+    push local 0
+    call Soldier.shoot1 2
+    push local 0
+    call ShootingGame.addBullet1 3
+    pop temp 0
+    push pointer 0
+    push this 1
+    push local 0
+    call Soldier.shoot2 2
+    push local 0
+    call ShootingGame.addBullet2 3
+    pop temp 0
+    push pointer 0
+    push this 0
+    push this 1
+    call ShootingGame.updateBullets 3
+    pop temp 0
+    push this 0
+    call Soldier.getHealth 1
+    pop local 3
+    push this 1
+    call Soldier.getHealth 1
+    pop local 4
+    push local 3
+    push constant 1
+    lt
+    not
+    if-goto L97
+    push constant 1
+    neg
+    pop local 2
+    goto L98
+label L97
+label L98
+    push local 4
+    push constant 1
+    lt
+    not
+    if-goto L99
+    push constant 1
+    neg
+    pop local 2
+    goto L100
+label L99
+label L100
+    push constant 1
+    call Sys.wait 1
+    pop temp 0
+    push local 0
+    push constant 140
+    eq
+    not
+    if-goto L101
+    push constant 1
+    neg
+    pop local 1
+    goto L102
+label L101
+label L102
+    goto L95
+label L96
+    push constant 0
+    return
+function ShootingGame.dispose 2
+    push argument 0
+    pop pointer 0
+    push constant 0
+    pop local 0
+    push this 0
+    call Soldier.dispose 1
+    pop temp 0
+    push this 1
+    call Soldier.dispose 1
+    pop temp 0
+    push this 2
+    call Memory.deAlloc 1
+    pop temp 0
+    push pointer 0
+    call Memory.deAlloc 1
+    pop temp 0
+    push constant 0
+    return
+function ShootingGame.movePlayer 1
+    push argument 0
+    pop pointer 0
+    push argument 1
+    call Soldier.getDirection 1
+    pop local 0
+    push pointer 0
+    push argument 1
+    push argument 2
+    push local 0
+    call ShootingGame.collision 4
+    not
+    not
+    if-goto L103
+    push local 0
+    push constant 1
+    eq
+    not
+    if-goto L105
+    push argument 1
+    call Soldier.moveUp 1
+    pop temp 0
+    goto L106
+label L105
+label L106
+    push local 0
+    push constant 2
+    eq
+    not
+    if-goto L107
+    push argument 1
+    call Soldier.moveDown 1
+    pop temp 0
+    goto L108
+label L107
+label L108
+    push local 0
+    push constant 3
+    eq
+    not
+    if-goto L109
+    push argument 1
+    call Soldier.moveLeft 1
+    pop temp 0
+    goto L110
+label L109
+label L110
+    push local 0
+    push constant 4
+    eq
+    not
+    if-goto L111
+    push argument 1
+    call Soldier.moveRight 1
+    pop temp 0
+    goto L112
+label L111
+label L112
+    goto L104
+label L103
+label L104
+    push constant 0
+    return
+function ShootingGame.moveSecondPlayer 1
+    push argument 0
+    pop pointer 0
+    push argument 1
+    call Soldier.getDirection 1
+    pop local 0
+    push pointer 0
+    push argument 1
+    push argument 2
+    push local 0
+    call ShootingGame.collision 4
+    not
+    not
+    if-goto L113
+    push local 0
+    push constant 1
+    eq
+    not
+    if-goto L115
+    push argument 1
+    call Soldier.moveUpSoldier2 1
+    pop temp 0
+    goto L116
+label L115
+label L116
+    push local 0
+    push constant 2
+    eq
+    not
+    if-goto L117
+    push argument 1
+    call Soldier.moveDownSoldier2 1
+    pop temp 0
+    goto L118
+label L117
+label L118
+    push local 0
+    push constant 3
+    eq
+    not
+    if-goto L119
+    push argument 1
+    call Soldier.moveLeftSoldier2 1
+    pop temp 0
+    goto L120
+label L119
+label L120
+    push local 0
+    push constant 4
+    eq
+    not
+    if-goto L121
+    push argument 1
+    call Soldier.moveRightSoldier2 1
+    pop temp 0
+    goto L122
+label L121
+label L122
+    goto L114
+label L113
+label L114
+    push constant 0
+    return
+function ShootingGame.collision 4
+    push argument 0
+    pop pointer 0
+    push argument 3
+    push constant 4
+    gt
+    not
+    if-goto L123
+    push constant 0
+    return
+    goto L124
+label L123
+label L124
+    push argument 1
+    call Soldier.getX 1
+    pop local 2
+    push argument 1
+    call Soldier.getY 1
+    pop local 3
+    push argument 2
+    call Soldier.getX 1
+    pop local 0
+    push argument 2
+    call Soldier.getY 1
+    pop local 1
+    push argument 3
+    push constant 1
+    eq
+    not
+    if-goto L125
+    push local 3
+    push constant 2
+    sub
+    pop local 3
+    goto L126
+label L125
+label L126
+    push argument 3
+    push constant 2
+    eq
+    not
+    if-goto L127
+    push local 3
+    push constant 2
+    add
+    pop local 3
+    goto L128
+label L127
+label L128
+    push argument 3
+    push constant 3
+    eq
+    not
+    if-goto L129
+    push local 2
+    push constant 2
+    sub
+    pop local 2
+    goto L130
+label L129
+label L130
+    push argument 3
+    push constant 4
+    eq
+    not
+    if-goto L131
+    push local 2
+    push constant 2
+    add
+    pop local 2
+    goto L132
+label L131
+label L132
+    push local 2
+    push local 0
+    push constant 32
+    add
+    lt
+    push local 2
+    push constant 32
+    add
+    push local 0
+    gt
+    and
+    push local 3
+    push local 1
+    push constant 32
+    add
+    lt
+    and
+    push local 3
+    push constant 32
+    add
+    push local 1
+    gt
+    and
+    return
+function ShootingGame.updateBullets 8
+    push argument 0
+    pop pointer 0
+    push constant 0
+    pop local 0
+label L133
+    push local 0
+    push this 3
+    lt
+    not
+    if-goto L134
+    push local 0
+    push this 2
+    add
+    pop pointer 1
+    push that 0
+    pop local 2
+    push pointer 0
+    push local 2
+    push argument 1
+    call ShootingGame.bulletCollide 3
+    pop local 3
+    push pointer 0
+    push local 2
+    push argument 2
+    call ShootingGame.bulletCollide 3
+    pop local 4
+    push local 3
+    not
+    if-goto L135
+    push argument 1
+    call Soldier.gotHit 1
+    pop local 5
+    push argument 1
+    call Soldier.getHealth 1
+    pop local 7
+    push local 7
+    push constant 10
+    lt
+    not
+    if-goto L137
+    push constant 1
+    push constant 13
+    call Output.moveCursor 2
+    pop temp 0
+    push constant 1
+    call String.new 1
+    push constant 32
+    call String.appendChar 2
+    call Output.printString 1
+    pop temp 0
+    goto L138
+label L137
+label L138
+    push constant 1
+    push constant 12
+    call Output.moveCursor 2
+    pop temp 0
+    push argument 1
+    call Soldier.getHealth 1
+    call Output.printInt 1
+    pop temp 0
+    push local 2
+    call Bullet.dispose 1
+    pop temp 0
+    push pointer 0
+    push local 0
+    call ShootingGame.removeBullet 2
+    pop temp 0
+    push local 5
+    not
+    not
+    if-goto L139
+    push constant 20
+    push constant 20
+    call Output.moveCursor 2
+    pop temp 0
+    push constant 14
+    call String.new 1
+    push constant 80
+    call String.appendChar 2
+    push constant 108
+    call String.appendChar 2
+    push constant 97
+    call String.appendChar 2
+    push constant 121
+    call String.appendChar 2
+    push constant 101
+    call String.appendChar 2
+    push constant 114
+    call String.appendChar 2
+    push constant 32
+    call String.appendChar 2
+    push constant 49
+    call String.appendChar 2
+    push constant 32
+    call String.appendChar 2
+    push constant 68
+    call String.appendChar 2
+    push constant 69
+    call String.appendChar 2
+    push constant 65
+    call String.appendChar 2
+    push constant 68
+    call String.appendChar 2
+    push constant 33
+    call String.appendChar 2
+    call Output.printString 1
+    pop temp 0
+    goto L140
+label L139
+label L140
+    goto L136
+label L135
+label L136
+    push local 3
+    not
+    push local 4
+    and
+    not
+    if-goto L141
+    push argument 2
+    call Soldier.gotHit 1
+    pop local 6
+    push argument 2
+    call Soldier.getHealth 1
+    pop local 7
+    push local 7
+    push constant 10
+    lt
+    not
+    if-goto L143
+    push constant 1
+    push constant 62
+    call Output.moveCursor 2
+    pop temp 0
+    push constant 1
+    call String.new 1
+    push constant 32
+    call String.appendChar 2
+    call Output.printString 1
+    pop temp 0
+    goto L144
+label L143
+label L144
+    push constant 1
+    push constant 61
+    call Output.moveCursor 2
+    pop temp 0
+    push argument 2
+    call Soldier.getHealth 1
+    call Output.printInt 1
+    pop temp 0
+    push local 2
+    call Bullet.dispose 1
+    pop temp 0
+    push pointer 0
+    push local 0
+    call ShootingGame.removeBullet 2
+    pop temp 0
+    push local 6
+    not
+    not
+    if-goto L145
+    push constant 10
+    push constant 10
+    call Output.moveCursor 2
+    pop temp 0
+    push constant 14
+    call String.new 1
+    push constant 80
+    call String.appendChar 2
+    push constant 108
+    call String.appendChar 2
+    push constant 97
+    call String.appendChar 2
+    push constant 121
+    call String.appendChar 2
+    push constant 101
+    call String.appendChar 2
+    push constant 114
+    call String.appendChar 2
+    push constant 32
+    call String.appendChar 2
+    push constant 50
+    call String.appendChar 2
+    push constant 32
+    call String.appendChar 2
+    push constant 68
+    call String.appendChar 2
+    push constant 69
+    call String.appendChar 2
+    push constant 65
+    call String.appendChar 2
+    push constant 68
+    call String.appendChar 2
+    push constant 33
+    call String.appendChar 2
+    call Output.printString 1
+    pop temp 0
+    goto L146
+label L145
+label L146
+    goto L142
+label L141
+label L142
+    push local 3
+    not
+    push local 4
+    not
+    and
+    not
+    if-goto L147
+    push local 2
+    call Bullet.moveBullet 1
+    pop local 1
+    push local 1
+    not
+    not
+    if-goto L149
+    push local 2
+    call Bullet.dispose 1
+    pop temp 0
+    push pointer 0
+    push local 0
+    call ShootingGame.removeBullet 2
+    pop temp 0
+    goto L150
+label L149
+    push local 0
+    push constant 1
+    add
+    pop local 0
+label L150
+    goto L148
+label L147
+label L148
+    goto L133
+label L134
+    push constant 0
+    return
+function ShootingGame.addBullet1 0
+    push argument 0
+    pop pointer 0
+    push argument 2
+    push constant 32
+    eq
+    not
+    if-goto L151
+    push this 3
+    push this 2
+    add
+    push argument 1
+    pop temp 0
+    pop pointer 1
+    push temp 0
+    pop that 0
+    push this 3
+    push constant 1
+    add
+    pop this 3
+    goto L152
+label L151
+label L152
+    push constant 0
+    return
+function ShootingGame.addBullet2 0
+    push argument 0
+    pop pointer 0
+    push argument 2
+    push constant 128
+    eq
+    not
+    if-goto L153
+    push this 3
+    push this 2
+    add
+    push argument 1
+    pop temp 0
+    pop pointer 1
+    push temp 0
+    pop that 0
+    push this 3
+    push constant 1
+    add
+    pop this 3
+    goto L154
+label L153
+label L154
+    push constant 0
+    return
+function ShootingGame.removeBullet 1
+    push argument 0
+    pop pointer 0
+    push argument 1
+    pop local 0
+label L155
+    push local 0
+    push this 3
+    push constant 1
+    sub
+    lt
+    not
+    if-goto L156
+    push local 0
+    push this 2
+    add
+    push local 0
+    push constant 1
+    add
+    push this 2
+    add
+    pop pointer 1
+    push that 0
+    pop temp 0
+    pop pointer 1
+    push temp 0
+    pop that 0
+    push local 0
+    push constant 1
+    add
+    pop local 0
+    goto L155
+label L156
+    push this 3
+    push constant 1
+    sub
+    pop this 3
+    push constant 0
+    return
+function ShootingGame.bulletCollide 4
+    push argument 0
+    pop pointer 0
+    push argument 1
+    call Bullet.getX 1
+    pop local 0
+    push argument 1
+    call Bullet.getY 1
+    pop local 1
+    push argument 2
+    call Soldier.getX 1
+    pop local 2
+    push argument 2
+    call Soldier.getY 1
+    pop local 3
+    push local 0
+    push local 2
+    push constant 32
+    add
+    lt
+    push local 0
+    push constant 4
+    add
+    push local 2
+    gt
+    and
+    push local 1
+    push local 3
+    push constant 32
+    add
+    lt
+    and
+    push local 1
+    push constant 4
+    add
+    push local 3
+    gt
+    and
+    return
+function ShootingGame.getWinner 0
+    push argument 0
+    pop pointer 0
+    push this 0
+    call Soldier.getHealth 1
+    push constant 1
+    lt
+    not
+    if-goto L157
+    push constant 2
+    return
+    goto L158
+label L157
+label L158
+    push this 1
+    call Soldier.getHealth 1
+    push constant 1
+    lt
+    not
+    if-goto L159
+    push constant 1
+    return
+    goto L160
+label L159
+label L160
+    push constant 0
+    return
